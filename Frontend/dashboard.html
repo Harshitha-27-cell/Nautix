@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARGO Ocean Data Discovery - Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Background Ocean Grid & Glows -->
+    <div class="ocean-bg">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+        <div class="ocean-grid"></div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dash-header">
+            <div class="logo-area">
+                <div class="logo-icon small">
+                    <i class="fa-solid fa-anchor"></i>
+                </div>
+                <div>
+                    <h2>ARGO discovery</h2>
+                    <p>Protected API Interface</p>
+                </div>
+            </div>
+            <div class="user-status-area">
+                <span id="user-badge" class="user-badge"><i class="fa-solid fa-circle-user"></i> Loading...</span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content Grid -->
+        <div class="dash-grid">
+            <!-- Profile Card -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <h3><i class="fa-regular fa-id-card"></i> User Profile Details</h3>
+                </div>
+                <div class="profile-info">
+                    <div class="info-row">
+                        <span class="info-label">Account ID:</span>
+                        <span id="profile-id" class="info-value">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Full Name:</span>
+                        <span id="profile-name" class="info-value">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email Address:</span>
+                        <span id="profile-email" class="info-value">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Member Since:</span>
+                        <span id="profile-joined" class="info-value">...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Management & Security Console -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-shield-halved"></i> Security Token Details</h3>
+                </div>
+                <div class="token-status">
+                    <div class="token-item">
+                        <div class="token-desc">
+                            <strong>Access Token Status</strong>
+                            <span id="access-token-expiry">Valid for 15m</span>
+                        </div>
+                        <div class="status-indicator active" id="access-indicator"></div>
+                    </div>
+                    <div class="token-item">
+                        <div class="token-desc">
+                            <strong>Refresh Token Status</strong>
+                            <span>Valid for 7d</span>
+                        </div>
+                        <div class="status-indicator active"></div>
+                    </div>
+                    <div class="token-actions">
+                        <button class="action-btn" onclick="forceTokenRefresh()">
+                            <i class="fa-solid fa-rotate"></i> Force Token Refresh
+                        </button>
+                        <button class="action-btn secondary" onclick="loadProtectedProfile()">
+                            <i class="fa-solid fa-arrow-down-up-lock"></i> Re-test API
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Logs / Dev Monitor -->
+            <div class="dash-card full-width">
+                <div class="card-header flex-header">
+                    <h3><i class="fa-solid fa-terminal"></i> Activity Log & Auth Interceptor Log</h3>
+                    <button class="clear-log-btn" onclick="clearLogs()">Clear Console</button>
+                </div>
+                <div id="auth-log-console" class="log-console">
+                    <div class="log-entry system">[system] Security console initialized. Active session detected.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Ensure user is logged in
+        if (!isLoggedIn()) {
+            window.location.href = 'index.html';
+        } else {
+            // Load details
+            window.onload = function() {
+                loadProtectedProfile();
+            };
+        }
+    </script>
+</body>
+</html>

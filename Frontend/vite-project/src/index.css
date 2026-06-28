@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+  
+  --color-ocean-bg: #0a1628;
+  --color-ocean-card: #0d1b31;
+  --color-ocean-border: rgba(0, 180, 216, 0.3);
+  --color-ocean-blue: #00b4d8;
+  --color-ocean-cyan: #4cc9f0;
+  --color-ocean-dark: #040810;
+  --color-ocean-accent: #3a86c8;
+}
+
+:root {
+  color-scheme: dark;
+  background-color: var(--color-ocean-bg);
+  color: #f0f3f8;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-ocean-bg);
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar for premium dark-mode feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-ocean-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-ocean-card);
+  border-radius: 4px;
+  border: 1px solid var(--color-ocean-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ocean-blue);
+}
+
+/* Custom Leaflet Map styling overrides to blend into dark theme */
+.leaflet-container {
+  background: var(--color-ocean-dark) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--color-ocean-card) !important;
+  color: #f0f3f8 !important;
+  border: 1px solid var(--color-ocean-border) !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--color-ocean-card) !important;
+}
+
+.leaflet-bar {
+  border: 1px solid var(--color-ocean-border) !important;
+}
+
+.leaflet-bar a {
+  background: var(--color-ocean-card) !important;
+  color: #f0f3f8 !important;
+  border-bottom: 1px solid var(--color-ocean-border) !important;
+}
+
+.leaflet-bar a:hover {
+  background: var(--color-ocean-blue) !important;
+  color: var(--color-ocean-dark) !important;
+}
+
+/* Ocean UI animations */
+@keyframes bubble-rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-110vh) scale(0.4); opacity: 0; }
+}
+
+@keyframes orb-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.1); }
+  50% { transform: translate(-20px, -40px) scale(1); }
+  75% { transform: translate(-40px, -10px) scale(0.9); }
+}
+
+@keyframes water-drift {
+  0%, 100% { transform: scale(1.05) translateY(0); }
+  50% { transform: scale(1.08) translateY(-8px); }
+}
+
+@keyframes ocean-caustics {
+  0% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes whale-swim {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  25% { transform: translateX(calc(-50% + 20px)) translateY(-8px); }
+  75% { transform: translateX(calc(-50% - 15px)) translateY(5px); }
+}
+
+@keyframes whale-look {
+  0%, 100% { transform: perspective(400px) rotateY(0deg); }
+  50% { transform: perspective(400px) rotateY(8deg); }
+}
+
+@keyframes dolphin-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+.animate-water-drift { animation: water-drift 8s ease-in-out infinite; }
+.animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+.animate-fade-in { animation: fade-in 0.5s ease-out; }
+.animate-dolphin-wiggle { animation: dolphin-wiggle 0.6s ease-in-out; }
+
+.ocean-water-layer {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 180, 216, 0.08) 30%,
+    rgba(76, 201, 240, 0.12) 60%,
+    transparent 100%
+  );
+  background-size: 100% 200%;
+  animation: ocean-caustics 6s linear infinite;
+}
+
+.whale-swim-container {
+  animation: whale-swim 6s ease-in-out infinite;
+}
+
+.whale-look-at-user,
+.dolphin-look-at-user {
+  animation: whale-look 4s ease-in-out infinite;
+}
+
+.glass-card {
+  background: rgba(13, 27, 49, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 180, 216, 0.25);
+}
+
+.glass-panel {
+  background: rgba(7, 13, 25, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(76, 201, 240, 0.2);
+}
+
