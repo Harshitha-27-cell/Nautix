@@ -20,16 +20,22 @@ from app.api.visualization_router import router as visualization_router
 setup_logging()
 logger = logging.getLogger(__name__)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup validation check: Test database connectivity to argo_ocean
+    # Startup validation check: Test database connectivity
     try:
         async with engine.begin() as conn:
             await conn.execute(text("SELECT 1"))
-        logger.info("Successfully connected to the database 'argo_ocean'. Database validation check passed!")
+        logger.info(
+            "Successfully connected to the database 'argo_ocean'. Database validation check passed!"
+        )
     except Exception as e:
-        logger.critical(f"CRITICAL: Database connection validation failed for 'argo_ocean'. Error: {e}")
+        logger.critical(
+            f"CRITICAL: Database connection validation failed for 'argo_ocean'. Error: {e}"
+        )
     yield
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -39,12 +45,25 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Root Endpoint
+@app.get("/")
+async def root():
+    return {
+        "message": "Nautix Backend is running successfully 🚀",
+        "docs": "/docs",
+        "redoc": "/redoc",
+        "api": settings.API_V1_STR
+    }
+
+
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        # Add your frontend URL after deployment, e.g.
+        # "https://your-frontend.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -62,8 +81,7 @@ app.include_router(rag_router, prefix="/rag", tags=["rag"])
 app.include_router(
     visualization_router,
     prefix="/visualization",
-    tags=["visualization"]
+    tags=["visualization"],
 )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
-
