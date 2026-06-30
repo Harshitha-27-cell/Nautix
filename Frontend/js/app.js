@@ -100,7 +100,7 @@ async function handleRegister(event) {
     setLoading(submitBtn, true, 'Creating Account...');
 
     try {
-        const response = await fetch(`${API_URL}/auth/register`, {
+        const response = await fetch(`${API_URL}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
