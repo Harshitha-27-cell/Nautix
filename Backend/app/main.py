@@ -1,5 +1,7 @@
 import logging
+import subprocess
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
@@ -23,17 +25,27 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Run Alembic migrations automatically
+    try:
+        logger.info("Running Alembic migrations...")
+        subprocess.run(
+            ["python", "-m", "alembic", "upgrade", "head"],
+            check=True
+        )
+        logger.info("Alembic migrations completed successfully.")
+    except Exception as e:
+        logger.error(f"Alembic migration failed: {e}")
+
     # Startup validation check: Test database connectivity
     try:
         async with engine.begin() as conn:
             await conn.execute(text("SELECT 1"))
         logger.info(
-            "Successfully connected to the database 'argo_ocean'. Database validation check passed!"
+            "Successfully connected to the database. Database validation check passed!"
         )
     except Exception as e:
-        logger.critical(
-            f"CRITICAL: Database connection validation failed for 'argo_ocean'. Error: {e}"
-        )
+        logger.critical(f"Database connection failed: {e}")
+
     yield
 
 
@@ -45,14 +57,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Root Endpoint
+
 @app.get("/")
 async def root():
     return {
         "message": "Nautix Backend is running successfully 🚀",
         "docs": "/docs",
         "redoc": "/redoc",
-        "api": settings.API_V1_STR
+        "api": settings.API_V1_STR,
     }
 
 
@@ -63,8 +75,6 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://nautix.vercel.app",
-        # Add your frontend URL after deployment, e.g.
-        # "https://your-frontend.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -84,5 +94,4 @@ app.include_router(
     prefix="/visualization",
     tags=["visualization"],
 )
-
 app.include_router(api_router, prefix=settings.API_V1_STR)
